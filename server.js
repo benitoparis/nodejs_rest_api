@@ -3,7 +3,7 @@ var express = require('express');
 const path = require('path');
 app = express();
 let ejs = require('ejs');
-let playersList = ['geddy', 'neil', 'alex'];
+
 app.set('view engine', 'ejs');
 app.set('views', './views');
 
@@ -16,10 +16,10 @@ let playerController = require('./controllers/players');
 
 new playerController(router).registerRoutes();
 
-app.route('/hello').get(function(req, res) {
-    console.log('hello');
+app.route('/home').get(function(req, res) {
+    console.log('home');
     //res.send('hello world !');
-    res.render('players', {list: playersList, title: 'Les joueurs'})
+    res.render('home', {title: 'Accueil'});
 });
 
 app.use('/', router);

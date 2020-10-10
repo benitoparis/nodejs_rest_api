@@ -8,14 +8,19 @@
 </head>
 <body>
 
-    <h1 class="bg-warning"><%= title %></h1>
-    <p class="text-danger">Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque neque minus dicta fugit eos, voluptate accusantium nulla sequi odio repellat voluptas maxime ex facilis rem culpa corrupti veniam hic sint.</p>
-    <p class="text-success">dsdsd</p>
-   <ul class="d-flex">
-    <% list.forEach(data=>{%>
-        <li><%= data %></li>
-    <% }); %>
-   </ul>
+    <div class="container">
+        <h1 class="bg-warning"><%= title %></h1>
+        <p class="text-danger">Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque neque minus dicta fugit eos, voluptate accusantium nulla sequi odio repellat voluptas maxime ex facilis rem culpa corrupti veniam hic sint.</p>
+        <p class="text-success">dsdsd</p>
+    
+       <ul class="">
+        <% list.forEach(data=>{%>
+            <li class="py-2"><%= data %></li>
+        <% }); %>
+       </ul>
+    </div>
+
+
 
 
 

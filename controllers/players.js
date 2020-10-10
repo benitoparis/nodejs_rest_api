@@ -7,6 +7,7 @@ class playerController {
   // A l'instanciation
   constructor(router){
     this.router = router;
+    this.playersList = ['geddy', 'neil', 'alex'];
   }
 
   // Méthode pour déclarer les routes pour la ressource player
@@ -14,19 +15,19 @@ class playerController {
     console.log('registerRoutes');
     this.router.get('/players', (req, res)=> {
       console.log('url players');
-      res.send('les joueurs');
+      res.render('players', {list: this.playersList, title: 'Les joueurs'})
     });
 
-    this.router.get('/players/add_new', (req, res)=> {
+    this.router.get('/player', (req, res)=> {
       console.log('url players');
-      res.send('<form method="post" action="/players/create"><label>Nom</label><input type="text" name="nom" /><button type="submit">ok</button></form>');
+      res.render('add_player', {title: 'Les joueurs'});
     });
 
 
-    this.router.post('/players/create', (req, res)=> {
+    this.router.post('/player', (req, res)=> {
       console.log('req', req);
       console.log('post players');
-      res.redirect('/hello');
+      res.redirect('/home');
     });
 
     //this.router.get('/players', this.getPlayers.bind(this));
