@@ -7,7 +7,12 @@ class playerController {
   // A l'instanciation
   constructor(router){
     this.router = router;
-    this.playersList = ['geddy', 'neil', 'alex'];
+    this.playersList = [
+      {id: 1, name:'geddy', position:'Attaquant', age: 23},
+      {id: 2, name:'marcus', position:'Defenseur', age: 24},
+      {id: 3, name:'laurent', position:'Attaquant', age: 22}
+      
+    ];
   }
 
   // Méthode pour déclarer les routes pour la ressource player
@@ -21,6 +26,20 @@ class playerController {
     this.router.get('/player', (req, res)=> {
       console.log('url players');
       res.render('add_player', {title: 'Les joueurs'});
+    });
+
+    this.router.get('/player/:id', (req, res)=> {
+
+      const playerFound = this.playersList.find(elem=> {
+        return elem.id === parseInt(req.params.id);
+      })
+      if (playerFound){
+        console.log('url players');
+        res.render('player_details', {title: 'Détails d un joueurs', playerDetails: playerFound});
+      } else {
+        res.render('<div>not Found</div>', {title: 'Détails d un joueurs'});
+      }
+
     });
 
 
