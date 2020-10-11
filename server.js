@@ -3,6 +3,7 @@ var express = require('express');
 const path = require('path');
 app = express();
 let ejs = require('ejs');
+var bodyParser = require('body-parser')
 
 app.set('view engine', 'ejs');
 app.set('views', './views');
@@ -11,8 +12,9 @@ app.set('views', './views');
 const router = express.Router();
 
 app.use(express.static(__dirname + '/node_modules/bootstrap/dist'));
+app.use(bodyParser.urlencoded({ extended: false }));
 
-let playerController = require('./controllers/players');
+let playerController = require('./controllers/playersController');
 
 new playerController(router).registerRoutes();
 
@@ -23,6 +25,11 @@ app.route('/home').get(function(req, res) {
 });
 
 app.use('/', router);
+
+app.get('*', ((req, res)=> {
+    res.render('<div>cette page n existe pas</div>', 404);
+}));
+
 app.use(express.static('public'));
 
 app.listen(8080);
