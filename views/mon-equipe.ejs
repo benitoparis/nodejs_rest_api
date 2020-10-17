@@ -1,0 +1,35 @@
+<%- include('./includes/header', path); %>
+
+    <div class="container">
+
+        <table class="table table-sm">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Nom</th>
+                    <th scope="col">Poste</th>
+                    <th scope="col">Age</th>
+                </tr>
+            </thead>
+            <tbody>
+
+            <% list.forEach((data, index)=>{%>
+                <tr>
+                    <th scope="row"><%= index %></th>
+                    <td><%= data.name %></td>
+                    <td><%= data.position %></td>
+                    <td><%= data.age %></td>
+                </tr>
+            <% }); %>
+
+            </tbody>
+        </table>
+    </div>
+    
+
+
+    <script src="js/jquery-1.11.0.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/wow.min.js"></script>
+</body>
+</html>

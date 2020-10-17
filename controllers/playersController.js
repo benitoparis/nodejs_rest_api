@@ -13,24 +13,25 @@ class PlayerController {
   // Méthode pour déclarer les routes pour la ressource player
   registerRoutes(){
     console.log('registerRoutes');
-
     this.router.post('/player/add_to_my_team', (req, res)=> {
-      console.log('in');
       const playerId = req.body.playerId;
       team.addPlayer(playerId);
-      console.log('team', team);
-      res.redirect('/home');
+      res.redirect('/players');
     });
-
 
     this.router.get('/players', (req, res)=> {
       console.log('url players');
-      res.render('players', {list: Player.getAllPlayers(), title: 'Les joueurs'})
+      res.render('players', {list: Player.getAllPlayers(), title: 'Les joueurs', path: '/players'})
+    });
+
+    this.router.get('/player/mon-equipe', (req, res)=> {
+      console.log('url players');
+      res.render('mon-equipe', {list: team.getTeamPlayers(), title: 'Mes joueurs', path: '/player/mon-equipe'})
     });
 
     this.router.get('/player', (req, res)=> {
       console.log('url players');
-      res.render('add_player', {title: 'Création d\'un nouveau joueur'});
+      res.render('add_player', {title: 'Création d\'un nouveau joueur', path: '/player'});
     });
 
     this.router.get('/player/:id', (req, res)=> {
@@ -50,7 +51,7 @@ class PlayerController {
     this.router.post('/player', (req, res)=> {
       console.log('post players');
       new Player(req.body.playerName, req.body.playerPosition, req.body.playerAge).save();
-      res.redirect('/home');
+      res.redirect('/players');
     });
 
 

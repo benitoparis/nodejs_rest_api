@@ -1,40 +1,46 @@
-<%- include('./includes/header'); %>
+<%- include('./includes/header', path); %>
 
     <div class="container">
-        <h1 class="bg-warning"><%= title %></h1>
-        <p class="text-danger">Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque neque minus dicta fugit eos, voluptate accusantium nulla sequi odio repellat voluptas maxime ex facilis rem culpa corrupti veniam hic sint.</p>
-        <p class="text-success">dsdsd</p>
 
-        <a class="btn btn-primary" href="/player" role="button">Ajouter un joueur</a>
-    
-        <div id="grid" class="my-3">
-            <div class="d-flex flex-row justify-content-between p-1 border">
-                <div class="text-capitalize font-weight-bold">Nom</div>
-                <div class="text-capitalize font-weight-bold">Poste</div>
-                <div class="text-capitalize font-weight-bold">age</div>
-                <div class="text-capitalize font-weight-bold"></div>
-            </div>
-            <% list.forEach(data=>{%>
-            <div class="d-flex flex-row justify-content-between p-1 border">
-                <div><%= data.name%></div>
-                <div><%= data.position %></div>
-                <div><%= data.age %></div>
-                <div>
+        <div class="w-100 d-flex flex-row-reverse mb-4">
+            <a class="btn btn-dark" href="/player" role="button">Ajouter un joueur</a>
+        </div>
+ 
+        <table class="table table-sm">
+            <thead>
+                <tr>
+                <th scope="col">#</th>
+                <th scope="col">Nom</th>
+                <th scope="col">Poste</th>
+                <th scope="col">Age</th>
+                <th scope="col"></th>
+
+                </tr>
+            </thead>
+            <tbody>
+
+            <% list.forEach((data, index)=>{%>
+                <tr>
+                <th scope="row"><%= index %></th>
+                <td><%= data.name %></td>
+                <td><%= data.position %></td>
+                <td><%= data.age %></td>
+                <td class="d-flex justify-content-end">
                     <form action="/player/add_to_my_team" method="POST">
                         <input type="hidden" name="playerId" value="<%= data.id %>">
                         <button type="submit" class="btn btn-primary btn-sm">Ajouter à mon équipe</button>
                     </form>
-            </div>
+                </td>
+                </tr>
             <% }); %>
-        </div>
 
-
+            </tbody>
+        </table>
     </div>
-
-
-
-
-
-   <script language="javascript" src="js/bootstrap.min.js"></script>
+    
+ 
+    <script src="js/jquery-1.11.0.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/wow.min.js"></script>
 </body>
 </html>

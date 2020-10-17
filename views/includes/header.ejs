@@ -6,6 +6,23 @@
     <title><%= title %></title>
     <link rel="stylesheet" href="css/bootstrap.min.css"/>
 </head>
-<h1 class="bg-warning"><%= title %></h1>
 
 <body>
+
+    <div class="d-flex flex-row align-items-center border">
+        <ul class="nav nav-pills">
+            <li class="nav-item">
+              <a class="nav-link <%= path ==='/player' ? 'active' : ''%>" href="/player">Créer un joueur</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link <%= path === '/players' ? 'active' : ''%>" href="/players">Joueurs</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link <%= path === '/player/mon-equipe' ? 'active' : ''%>" href="/player/mon-equipe">My team</a>
+            </li>
+          </ul>
+    </div>
+
+    <div class="container">
+      <h1 class="w-100 my-3"><%= title %></h1>
+    </div>
