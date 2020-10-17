@@ -1,8 +1,9 @@
 // On importe la clas
 const Player = require('../models/player');
+const team = require('../models/team');
 
 // Classe de la ressource joueur
-class playerController {
+class PlayerController {
 
   // A l'instanciation
   constructor(router){
@@ -12,6 +13,16 @@ class playerController {
   // Méthode pour déclarer les routes pour la ressource player
   registerRoutes(){
     console.log('registerRoutes');
+
+    this.router.post('/player/add_to_my_team', (req, res)=> {
+      console.log('in');
+      const playerId = req.body.playerId;
+      team.addPlayer(playerId);
+      console.log('team', team);
+      res.redirect('/home');
+    });
+
+
     this.router.get('/players', (req, res)=> {
       console.log('url players');
       res.render('players', {list: Player.getAllPlayers(), title: 'Les joueurs'})
@@ -34,12 +45,15 @@ class playerController {
 
     });
 
+
+
     this.router.post('/player', (req, res)=> {
-      console.log('req', req);
       console.log('post players');
       new Player(req.body.playerName, req.body.playerPosition, req.body.playerAge).save();
       res.redirect('/home');
     });
+
+
 
     //this.router.get('/players', this.getPlayers.bind(this));
     // this.router.get();
@@ -53,4 +67,4 @@ class playerController {
   }
 }
 
-module.exports = playerController;
+module.exports = PlayerController;

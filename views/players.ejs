@@ -12,12 +12,18 @@
                 <div class="text-capitalize font-weight-bold">Nom</div>
                 <div class="text-capitalize font-weight-bold">Poste</div>
                 <div class="text-capitalize font-weight-bold">age</div>
+                <div class="text-capitalize font-weight-bold"></div>
             </div>
             <% list.forEach(data=>{%>
             <div class="d-flex flex-row justify-content-between p-1 border">
                 <div><%= data.name%></div>
                 <div><%= data.position %></div>
                 <div><%= data.age %></div>
+                <div>
+                    <form action="/player/add_to_my_team" method="POST">
+                        <input type="hidden" name="playerId" value="<%= data.id %>">
+                        <button type="submit" class="btn btn-primary btn-sm">Ajouter à mon équipe</button>
+                    </form>
             </div>
             <% }); %>
         </div>

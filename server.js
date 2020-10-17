@@ -14,9 +14,9 @@ const router = express.Router();
 app.use(express.static(__dirname + '/node_modules/bootstrap/dist'));
 app.use(bodyParser.urlencoded({ extended: false }));
 
-let playerController = require('./controllers/playersController');
+let PlayerController = require('./controllers/playersController');
 
-new playerController(router).registerRoutes();
+new PlayerController(router).registerRoutes();
 
 app.route('/home').get(function(req, res) {
     console.log('home');
@@ -26,9 +26,9 @@ app.route('/home').get(function(req, res) {
 
 app.use('/', router);
 
-app.get('*', ((req, res)=> {
-    res.render('<div>cette page n existe pas</div>', 404);
-}));
+// app.get('*', ((req, res)=> {
+//     res.render('<div>cette page n existe pas</div>', 404);
+// }));
 
 app.use(express.static('public'));
 
