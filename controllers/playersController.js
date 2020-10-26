@@ -1,6 +1,7 @@
 // On importe la clas
-const Player = require('../models/player');
-const team = require('../models/team');
+const player = require('../models/player');
+//const team = require('../models/team');
+//const db = require('../util/database');
 
 // Classe de la ressource joueur
 class PlayerController {
@@ -21,12 +22,19 @@ class PlayerController {
 
     this.router.get('/players', (req, res)=> {
       console.log('url players');
-      res.render('players', {list: Player.getAllPlayers(), title: 'Les joueurs', path: '/players'})
+      db.execute('SELECT * FROM players').then(data=>{
+        console.log('data', data[0]);
+        res.render('players', {list: data[0], title: 'Les joueurs', path: '/players'});
+      })
     });
 
     this.router.get('/player/mon-equipe', (req, res)=> {
       console.log('url players');
-      res.render('mon-equipe', {list: team.getTeamPlayers(), title: 'Mes joueurs', path: '/player/mon-equipe'})
+      db.execute('SELECT * FROM users_players WHERE userid === 1').then(data=> {
+
+        res.render('mon-equipe', {list: data[0], title: 'Mes joueurs', path: '/player/mon-equipe'});
+      })
+
     });
 
     this.router.get('/player', (req, res)=> {
@@ -47,10 +55,15 @@ class PlayerController {
     });
 
 
-
     this.router.post('/player', (req, res)=> {
       console.log('post players');
-      new Player(req.body.playerName, req.body.playerPosition, req.body.playerAge).save();
+      //new Player(req.body.playerName, req.body.playerPosition, req.body.playerAge).save();
+
+      player.create({
+        name: req.body.playerName,
+        position: req.body.playerPosition,
+        age: req.body.playerAge
+      })
       res.redirect('/players');
     });
 

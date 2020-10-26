@@ -4,6 +4,7 @@ const path = require('path');
 app = express();
 let ejs = require('ejs');
 var bodyParser = require('body-parser')
+const sequelize = require('./util/database');
 
 app.set('view engine', 'ejs');
 app.set('views', './views');
@@ -14,9 +15,23 @@ const router = express.Router();
 app.use(express.static(__dirname + '/node_modules/bootstrap/dist'));
 app.use(bodyParser.urlencoded({ extended: false }));
 
+
+sequelize.sync().then(data=>{
+    app.listen(8080);
+})
+.catch(err=>{
+    console.log(err);
+});
+
+
+
 let PlayerController = require('./controllers/playersController');
+let UserController = require('./controllers/userController');
+let AuthController = require('./controllers/authController');
 
 new PlayerController(router).registerRoutes();
+new UserController(router).registerRoutes();
+new AuthController(router).registerRoutes();
 
 app.route('/home').get(function(req, res) {
     console.log('home');
@@ -32,6 +47,6 @@ app.use('/', router);
 
 app.use(express.static('public'));
 
-app.listen(8080);
 
-console.log('dddd');
+
+
