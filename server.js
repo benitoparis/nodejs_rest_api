@@ -5,6 +5,8 @@ app = express();
 let ejs = require('ejs');
 var bodyParser = require('body-parser')
 const sequelize = require('./util/database');
+const player = require('./models/player');
+const user = require('./models/user');
 
 app.set('view engine', 'ejs');
 app.set('views', './views');
@@ -15,6 +17,8 @@ const router = express.Router();
 app.use(express.static(__dirname + '/node_modules/bootstrap/dist'));
 app.use(bodyParser.urlencoded({ extended: false }));
 
+
+player.belongsTo(user); // Will add companyId to user
 
 sequelize.sync({
     force: true
