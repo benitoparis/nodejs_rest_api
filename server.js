@@ -16,7 +16,9 @@ app.use(express.static(__dirname + '/node_modules/bootstrap/dist'));
 app.use(bodyParser.urlencoded({ extended: false }));
 
 
-sequelize.sync().then(data=>{
+sequelize.sync({
+    force: true
+}).then(data=>{
     app.listen(8080);
 })
 .catch(err=>{

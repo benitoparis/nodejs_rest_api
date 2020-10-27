@@ -20,6 +20,23 @@ class AuthController {
             User.findOne()
         });
 
+        this.router.get('/signup', (req, res)=> {
+            res.render('signup', {title: 'Signup', path: '/signup'});
+        });
+
+        this.router.post('/signup', (req, res)=> {
+            console.log('req', req.body);
+            User.create({
+                nickname: req.body.nickname,
+                email: req.body.email,
+                age: req.body.age,
+                city: req.body.city,
+                password: req.body.password
+            }).then(user=>{
+                res.render('home', {title: 'Accueil', path: '/home'});
+            });
+        });
+
     }
 
 }
