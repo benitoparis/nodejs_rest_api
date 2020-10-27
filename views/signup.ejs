@@ -1,0 +1,29 @@
+<%- include('./includes/header'); %>
+
+<div class="d-flex justify-content-center">
+    <div id="signup" style="width: 400px">
+        <form action="sign-up" method="POST">
+            <div class="form-control">
+                <label for="email">Email*</label>
+                <input type="email" name="email" id="email">
+            </div>
+            <div class="form-control">
+                <label for="age">Age*</label>
+                <input type="number" name="age" id="age">
+            </div>
+            <div class="form-control">
+                <label for="city">City*</label>
+                <input type="text" name="city" id="city">
+            </div>
+            <div class="form-control">
+                <label for="password">Password*</label>
+                <input type="password" name="password" id="password">
+            </div>
+            <div class="form-control">
+                <label for="password-confirmation">Password confirmation*</label>
+                <input type="password" name="password-confirmation" id="password-confirmation">
+            </div>
+            <button type="submit" class="btn btn-default">Se connecter</button>
+        </form>
+    </div>
+</div>
