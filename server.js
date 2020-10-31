@@ -17,8 +17,8 @@ const router = express.Router();
 app.use(express.static(__dirname + '/node_modules/bootstrap/dist'));
 app.use(bodyParser.urlencoded({ extended: false }));
 
+//player.belongsTo(user); // Will add companyId to user
 
-player.belongsTo(user); // Will add companyId to user
 
 sequelize.sync({
     force: true

@@ -1,46 +1,44 @@
 <%- include('./includes/header', path); %>
 
-    <div class="container">
+        <div class="container">
 
-        <div class="w-100 d-flex flex-row-reverse mb-4">
-            <a class="btn btn-dark" href="/player" role="button">Ajouter un joueur</a>
-        </div>
- 
-        <table class="table table-sm">
-            <thead>
-                <tr>
-                <th scope="col">#</th>
-                <th scope="col">Nom</th>
-                <th scope="col">Poste</th>
-                <th scope="col">Age</th>
-                <th scope="col"></th>
-
-                </tr>
-            </thead>
-            <tbody>
-
-            <% list.forEach((data, index)=>{%>
-                <tr>
-                <th scope="row"><%= index %></th>
-                <td><%= data.name %></td>
-                <td><%= data.position %></td>
-                <td><%= data.age %></td>
-                <td class="d-flex justify-content-end">
-                    <form action="/player/add_to_my_team" method="POST">
-                        <input type="hidden" name="playerId" value="<%= data.id %>">
-                        <button type="submit" class="btn btn-primary btn-sm">Ajouter à mon équipe</button>
-                    </form>
-                </td>
-                </tr>
-            <% }); %>
-
-            </tbody>
-        </table>
-    </div>
+            <div class="w-100 d-flex flex-row-reverse mb-4">
+                <a class="btn btn-dark" href="/player" role="button">Ajouter un joueur</a>
+            </div>
     
- 
-    <script src="js/jquery-1.11.0.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/wow.min.js"></script>
-</body>
+            <table class="table table-sm">
+                <thead>
+                    <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Nom</th>
+                    <th scope="col">Poste</th>
+                    <th scope="col">Age</th>
+                    <th scope="col"></th>
+
+                    </tr>
+                </thead>
+                <tbody>
+
+                <% list.forEach((player, index)=>{%>
+                    <tr>
+                    <th scope="row"><%= index %></th>
+                    <td><%= player.dataValues.name %></td>
+                    <td><%= player.dataValues.position %></td>
+                    <td><%= player.dataValues.age %></td>
+                    <td class="d-flex justify-content-end">
+                        <form action="/player/add_to_my_team" method="POST">
+                            <input type="hidden" name="playerId" value="<%= player.dataValues.id %>">
+                            <button type="submit" class="btn btn-primary btn-sm">Ajouter à mon équipe</button>
+                        </form>
+                    </td>
+                    </tr>
+                <% }); %>
+
+                </tbody>
+            </table>
+        </div>
+        
+    
+        <script language="javascript" src="js/bootstrap.min.js"></script>
+    </body>
 </html>
