@@ -16,8 +16,27 @@ class AuthController {
         });
 
         this.router.post('/login', (req, res)=> {
+
+            console.log('req.body', req.body);
+
+            User.findOne({ where: { email: req.body.email, password: req.body.password } })
+            .then(user=> {
+                console.log('found')
+                req.session.isLoggedIn = true;
+                req.session.user = true;
+                res.redirect('home', {user: user, path:'/home'});
+            });
+
+            // req.session.isLoggedIn = true;
+            // if ( req.session.isLoggedIn){
+            //     res.redirect('home');
+            // } else {
+            //     res.redirect('login');
+            // }
+           
             console.log('req', req.body);
-            User.findOne()
+            //User.findOne()
+            
         });
 
         this.router.get('/signup', (req, res)=> {
@@ -35,6 +54,13 @@ class AuthController {
             }).then(user=>{
                 res.render('home', {title: 'Accueil', path: '/home'});
             });
+        });
+
+        this.router.get('/logout', (req, res) => {
+            req.session.destroy(()=>{
+                req.redirect(200,'login');
+            });
+            
         });
 
     }

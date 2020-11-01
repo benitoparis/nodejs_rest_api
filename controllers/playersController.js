@@ -43,6 +43,7 @@ class PlayerController {
     });
 
     this.router.get('/player', (req, res)=> {
+      console.log('req.session', req.session);
       console.log('url players');
       res.render('add_player', {title: 'Création d\'un nouveau joueur', path: '/player'});
     });
@@ -61,7 +62,7 @@ class PlayerController {
 
 
     this.router.post('/player', (req, res)=> {
-      console.log('post players', req.body);
+   
       //new Player(req.body.playerName, req.body.playerPosition, req.body.playerAge).save();
 
       Player.create({
