@@ -1,6 +1,7 @@
 
 const User = require('../models/user');
 
+
 class AuthController {
 
     // A l'instanciation
@@ -23,8 +24,8 @@ class AuthController {
             .then(user=> {
                 console.log('found')
                 req.session.isLoggedIn = true;
-                req.session.user = true;
-                res.redirect('home', {user: user, path:'/home'});
+                req.session.user = user;
+                res.render('home', {itle:'accueil',loggedIn: req.session.isLoggedIn, user: user, path:'/home'});
             });
 
             // req.session.isLoggedIn = true;
