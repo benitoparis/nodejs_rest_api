@@ -22,10 +22,17 @@ class AuthController {
 
             User.findOne({ where: { email: req.body.email, password: req.body.password } })
             .then(user=> {
-                console.log('found')
-                req.session.isLoggedIn = true;
-                req.session.user = user;
-                res.render('home', {itle:'accueil',loggedIn: req.session.isLoggedIn, user: user, path:'/home'});
+                console.log(user);
+
+                if (user !== null){
+                    req.session.isLoggedIn = true;
+                    req.session.user = user;
+                    res.render('home', {title:'accueil',loggedIn: req.session.isLoggedIn, path:'/home'});
+                } else {
+                    res.redirect('login');
+                }
+            }).catch(err=>{
+                console.log('err', err);
             });
 
             // req.session.isLoggedIn = true;
@@ -52,16 +59,17 @@ class AuthController {
                 age: req.body.age,
                 city: req.body.city,
                 password: req.body.password
-            }).then(user=>{
-                res.render('home', {title: 'Accueil', path: '/home'});
+            }).then(user =>{
+                if (user !== null){
+                    res.render('home', {title: 'Accueil', path: '/home'});
+                }
             });
         });
 
         this.router.get('/logout', (req, res) => {
             req.session.destroy(()=>{
-                req.redirect(200,'login');
+                res.redirect('login');
             });
-            
         });
 
     }

@@ -8,6 +8,13 @@ const sequelize = require('./util/database');
 const player = require('./models/player');
 const user = require('./models/user');
 const session = require('express-session');
+const SessionStore = require('express-session-sequelize')(session.Store);
+
+
+const sequelizeSessionStore = new SessionStore({
+    db: sequelize,
+});
+
 
 app.set('view engine', 'ejs');
 app.set('views', './views');
@@ -17,13 +24,20 @@ const router = express.Router();
 
 app.use(express.static(__dirname + '/node_modules/bootstrap/dist'));
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(session({secret:'my phrase', resave: false, saveUninitialized: false }));
+app.use(session(
+    {
+        secret:'my phrase',
+        resave: false,
+        saveUninitialized: false,
+        store: sequelizeSessionStore
+    }
+));
 
 player.belongsTo(user); // Will add companyId to user
 
 
 sequelize.sync({
-    force: true
+    force: false
 }).then(data=>{
     app.listen(8080);
 })
