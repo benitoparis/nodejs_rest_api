@@ -1,8 +1,34 @@
-// On importe la clas
-const Player = require('../models/player');
-//const team = require('../models/team');
-//const db = require('../util/database');
+// On importe la class
+const path = require('path');
 const checkAuth = require('../middleware/auth');
+const Player = require('../models/player');
+const user = require('../models/user');
+const multer = require('multer');
+
+const fileStorage = multer.diskStorage({
+  destination: (req, file, cb)=> {
+      //let destination = path.join(__dirname, 'uploads');
+      cb(null, 'uploads');
+  },
+  filename: (req, file, cb )=> {
+      cb(null, file.fieldname + '-' + Date.now());
+  }
+});
+
+// const fileFilter = (req, file, cb)=> {
+
+//   console.log('fileFilter file', file);
+//   if (file.minetype === 'image/png' || file.minetype === 'image/jpg' || file.minetype === 'image/jpeg' ){
+//     cb(null, true);
+//   } else {
+//     cb(null, false);
+//   }
+
+// };
+
+const upload = multer({ storage: fileStorage});
+
+
 
 // Classe de la ressource joueur
 class PlayerController {
@@ -14,11 +40,27 @@ class PlayerController {
 
   // Méthode pour déclarer les routes pour la ressource player
   registerRoutes(){
-    console.log('registerRoutes');
+
     this.router.post('/player/add_to_my_team', (req, res)=> {
-      const playerId = req.body.playerId;
-      team.addPlayer(playerId);
-      res.redirect('/players');
+
+      const userId = req.session.user.id;
+      
+      console.log('req', req);
+      const playerId = parseInt(req.body.playerId);
+      
+      Player.findOne({where : { id: playerId}})
+      .then(player=> {
+        console.log('player trouvé', player);
+
+        player.userId = userId;
+        player.save();
+
+        res.redirect('/players');
+      })
+      .catch(err=> {
+        console.log('err', err);
+      });
+
     });
 
     this.router.get('/players', checkAuth, (req, res)=> {
@@ -28,19 +70,32 @@ class PlayerController {
       //   res.render('players', {list: data[0], title: 'Les joueurs', path: '/players'});
       // })
 
-      Player.findAll()
+      Player.findAll({where: {userId:null}})
         .then(data=> {
           console.log('data', data);
-          res.render('players', {list: data, title: 'Les joueurs', path: '/players'});
+          res.render('players', {list: data, title: 'Les joueurs sur le marché', path: '/players'});
         })
         .catch();
     });
 
     this.router.get('/player/mon-equipe', checkAuth, (req, res)=> {
       console.log('url players');
-      // db.execute('SELECT * FROM users_players WHERE userid === 1').then(data=> {
-      //   res.render('mon-equipe', {list: data[0], title: 'Mes joueurs', path: '/player/mon-equipe'});
-      // })
+
+      const userId = req.session.user.id;
+      user.findByPk(userId)
+       .then(user=> {
+
+        console.log('user', user);
+        user.getPlayers().then(players=> {
+          console.log('players', players);
+
+          res.render('my-team', {list: players, title: 'Mes joueurs', path: '/player/mon-equipe'});
+        });
+
+       })
+       .catch(err=> {
+
+       });
     });
 
     this.router.get('/player', checkAuth, (req, res)=> {
@@ -49,45 +104,36 @@ class PlayerController {
       res.render('add_player', {title: 'Création d\'un nouveau joueur', path: '/player'});
     });
 
-    this.router.get('/player/:id', (req, res)=> {
+    this.router.get('/player/:id', checkAuth, (req, res) => {
 
-
-      const playerFound = Player.getPlayerById(parseInt(req.params.id));
-      if (playerFound){
-        res.render('player_details', {title: 'Détails d un joueurs', playerDetails: playerFound});
-      } else {
-        res.render('<div>not Found</div>', {title: 'Détails d un joueurs'});
-      }
+      Player.findByPk(parseInt(req.params.id))
+        .then(player=> {
+          res.render('player_details', {title: 'Détails d un joueurs', playerDetails: player});
+        })
+        .catch(err=> {
+          
+        });
 
     });
 
-
-    this.router.post('/player', (req, res)=> {
+    this.router.post('/player', upload.single('playerPhoto'),  (req, res)=> {
    
-      //new Player(req.body.playerName, req.body.playerPosition, req.body.playerAge).save();
+      console.log('req.body', req.body.file.path);
 
       Player.create({
         name: req.body.name,
         position: req.body.position,
-        age: req.body.age
+        age: req.body.age,
+        imageUrl: req.file,
+
       }).then(data=>{
         console.log('player enregistré');
         res.redirect('/players');
       });
     });
 
-
-
-    //this.router.get('/players', this.getPlayers.bind(this));
-    // this.router.get();
-    // this.router.post();
-    // this.router.put();
   }
 
-  // Méthode pour récupérer les joueurs
-  getPlayers(){
-    //var players = playerService.getPlayers();
-  }
 }
 
 module.exports = PlayerController;

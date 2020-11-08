@@ -1,0 +1,34 @@
+<%- include('./includes/header', path); %>
+
+        <div class="container">
+    
+            <table class="table table-sm">
+                <thead>
+                    <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Nom</th>
+                    <th scope="col">Poste</th>
+                    <th scope="col">Age</th>
+                    <th scope="col"></th>
+
+                    </tr>
+                </thead>
+                <tbody>
+
+                <% list.forEach((player, index)=>{%>
+                    <tr>
+                    <th scope="row"><%= index %></th>
+                    <td><%= player.dataValues.name %></td>
+                    <td><%= player.dataValues.position %></td>
+                    <td><%= player.dataValues.age %></td>
+                    <td class="d-flex justify-content-end"></td>
+                    </tr>
+                <% }); %>
+
+                </tbody>
+            </table>
+        </div>
+        
+        <script language="javascript" src="js/bootstrap.min.js"></script>
+    </body>
+</html>

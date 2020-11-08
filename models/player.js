@@ -12,6 +12,7 @@ const player = sequelize.define('players', {
     name: Sequelize.STRING,
     position: Sequelize.STRING,
     age: Sequelize.INTEGER,
+    imgUrl: Sequelize.STRING
 });
 
 module.exports = player;
