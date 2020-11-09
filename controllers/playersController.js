@@ -118,13 +118,13 @@ class PlayerController {
 
     this.router.post('/player', upload.single('playerPhoto'),  (req, res)=> {
    
-      console.log('req.body', req.body.file.path);
+      console.log('eq.file', req.file);
 
       Player.create({
         name: req.body.name,
         position: req.body.position,
         age: req.body.age,
-        imageUrl: req.file,
+        imgUrl: req.file.path,
 
       }).then(data=>{
         console.log('player enregistré');
