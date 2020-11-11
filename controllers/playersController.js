@@ -8,10 +8,10 @@ const multer = require('multer');
 const fileStorage = multer.diskStorage({
   destination: (req, file, cb)=> {
       //let destination = path.join(__dirname, 'uploads');
-      cb(null, 'uploads');
+      cb(null, 'uploads/images/');
   },
   filename: (req, file, cb )=> {
-      cb(null, file.fieldname + '-' + Date.now());
+      cb(null, file.fieldname + '-' + Date.now() + '.png');
   }
 });
 
@@ -118,13 +118,13 @@ class PlayerController {
 
     this.router.post('/player', upload.single('playerPhoto'),  (req, res)=> {
    
-      console.log('eq.file', req.file);
+      console.log('req.file', req.file);
 
       Player.create({
         name: req.body.name,
         position: req.body.position,
         age: req.body.age,
-        imgUrl: `/images/${req.filename}`,
+        imgUrl: `images/${req.file.filename}`,
 
       }).then(data=>{
         console.log('player enregistré');
