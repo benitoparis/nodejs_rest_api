@@ -1,4 +1,5 @@
 // On importe la class
+const fs = require('fs');
 const path = require('path');
 const checkAuth = require('../middleware/auth');
 const Player = require('../models/player');
@@ -130,8 +131,14 @@ class PlayerController {
         console.log('player enregistré');
         res.redirect('/players');
       });
+      
     });
 
+    this.router.get('/download/fichier', (req, res)=> {
+      var data = fs.readFileSync('./download/output.pdf');
+      res.contentType("application/pdf");
+      res.send(data);
+    });
   }
 
 }
