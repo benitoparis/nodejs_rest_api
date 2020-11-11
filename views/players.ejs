@@ -25,6 +25,10 @@
                     <td><%= player.dataValues.name %></td>
                     <td><%= player.dataValues.position %></td>
                     <td><%= player.dataValues.age %></td>
+                    <td>
+                        <a href="/player/<%= player.dataValues.id %>" class=" tn btn-primary">info</a>
+                    </td>
+
                     <td class="d-flex justify-content-end">
                         <form action="/player/add_to_my_team" method="POST">
                             <input type="hidden" name="playerId" value="<%= player.dataValues.id %>">

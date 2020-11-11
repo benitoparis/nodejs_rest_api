@@ -108,7 +108,7 @@ class PlayerController {
 
       Player.findByPk(parseInt(req.params.id))
         .then(player=> {
-          res.render('player_details', {title: 'Détails d un joueurs', playerDetails: player});
+          res.render('player_details', {title: 'Détails d un joueurs', playerDetails: player, path:'player_details'});
         })
         .catch(err=> {
           
@@ -124,7 +124,7 @@ class PlayerController {
         name: req.body.name,
         position: req.body.position,
         age: req.body.age,
-        imgUrl: req.file.path,
+        imgUrl: `/images/${req.filename}`,
 
       }).then(data=>{
         console.log('player enregistré');
