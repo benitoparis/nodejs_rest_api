@@ -1,10 +1,13 @@
-// On importe la class
-const fs = require('fs');
+// On importe la classs
 const path = require('path');
 const checkAuth = require('../middleware/auth');
 const Player = require('../models/player');
 const user = require('../models/user');
 const multer = require('multer');
+
+const fs = require('fs');
+const PDFDocument = require('../services/PDFDocumentWithTables_service');
+const doc = new PDFDocument();
 
 const fileStorage = multer.diskStorage({
   destination: (req, file, cb)=> {
@@ -82,6 +85,8 @@ class PlayerController {
     this.router.get('/player/mon-equipe', checkAuth, (req, res)=> {
       console.log('url players');
 
+
+   
       const userId = req.session.user.id;
       user.findByPk(userId)
        .then(user=> {
@@ -89,6 +94,8 @@ class PlayerController {
         console.log('user', user);
         user.getPlayers().then(players=> {
           console.log('players', players);
+
+ 
 
           res.render('my-team', {list: players, title: 'Mes joueurs', path: '/player/mon-equipe'});
         });
@@ -98,6 +105,84 @@ class PlayerController {
 
        });
     });
+
+    this.router.get('/players', checkAuth, (req, res)=> {
+      console.log('url players');
+      // db.execute('SELECT * FROM players').then(data=>{
+      //   console.log('data', data[0]);
+      //   res.render('players', {list: data[0], title: 'Les joueurs', path: '/players'});
+      // })
+
+      Player.findAll({where: {userId:null}})
+        .then(data=> {
+          console.log('data', data);
+          res.render('players', {list: data, title: 'Les joueurs sur le marché', path: '/players'});
+        })
+        .catch();
+    });
+
+    this.router.get('/player/mon-equipe/downloadPDF', checkAuth, (req, res)=> {
+
+      const userId = req.session.user.id;
+      user.findByPk(userId)
+       .then(user=> {
+
+        console.log('user', user);
+        user.getPlayers().then(players=> {
+
+          const playerRows = [];
+          players.forEach(player=> {
+            const rowPlayer = Object.values(player.dataValues);
+            console.log('rowPlayer', rowPlayer);
+            playerRows.push(rowPlayer);
+          });
+
+          // On génère un PDF avec la liste de l'équipe
+          doc.pipe(fs.createWriteStream('./download/output2.pdf'));
+
+          const table0 = {
+              headers: ['Numéro', 'Nom', 'Poste', 'Age', 'chemin img', 'Date de création', 'Date de modification'],
+              rows: playerRows
+          };
+
+          doc.table(table0, {
+              prepareHeader: () => doc.font('Helvetica-Bold'),
+              prepareRow: (row, index) => doc.font('Helvetica').fontSize(12)
+          });
+
+          const table1 = {
+              headers: ['classement', 'Equipe', 'buts marqués'],
+              rows: [
+                  ['1', 'OM', '34'],
+                  ['2', 'PSG', '22'],
+                  ['3', 'ST ETIENNE', '45']
+              ]
+          };
+
+          doc.moveDown().table(table1, 100, 350, { width: 300 });
+
+          doc.printImage('./uploads/images/playerPhoto-1605111218920.png', [50, 50], 'center', 'center');
+
+          doc.moveTo(10,10)
+          .lineTo(10, 500)
+          .lineWidth(1)
+          .stroke();
+
+          doc.end();
+
+          // On envoie le PDF
+          //var data = fs.readFileSync('../download/output2.pdf');
+          //res.contentType("application/pdf");
+          //res.send(data);
+      
+        });
+
+       })
+       .catch(err=> {
+
+       });
+    });
+
 
     this.router.get('/player', checkAuth, (req, res)=> {
       console.log('req.session', req.session);
