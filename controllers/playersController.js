@@ -9,6 +9,8 @@ const fs = require('fs');
 const PDFDocument = require('../services/PDFDocumentWithTables_service');
 const doc = new PDFDocument();
 
+const { getPagination, getPagingData} = require('../services/pagination_service');
+
 const fileStorage = multer.diskStorage({
   destination: (req, file, cb)=> {
       //let destination = path.join(__dirname, 'uploads');
@@ -48,13 +50,10 @@ class PlayerController {
     this.router.post('/player/add_to_my_team', (req, res)=> {
 
       const userId = req.session.user.id;
-      
-      console.log('req', req);
       const playerId = parseInt(req.body.playerId);
       
       Player.findOne({where : { id: playerId}})
       .then(player=> {
-        console.log('player trouvé', player);
 
         player.userId = userId;
         player.save();
@@ -62,83 +61,54 @@ class PlayerController {
         res.redirect('/players');
       })
       .catch(err=> {
-        console.log('err', err);
       });
 
     });
 
     this.router.get('/players', checkAuth, (req, res)=> {
-      console.log('url players');
+
+      let page= 0;
+      let size= 3;
+
+      if(req.query.page && req.query.size){
+        page = req.query.page;
+        size = req.query.size;
+
+      }
+      
+
+      console.log('page', page);
+      console.log('size', size);
+
+      const { limit, offset } = getPagination(page, size);
       // db.execute('SELECT * FROM players').then(data=>{
       //   console.log('data', data[0]);
       //   res.render('players', {list: data[0], title: 'Les joueurs', path: '/players'});
       // })
 
-      Player.findAll({where: {userId:null}})
+      Player.findAll({offset: offset, limit: limit, where: {userId: null}})
         .then(data=> {
-          console.log('data', data);
-          res.render('players', {list: data, title: 'Les joueurs sur le marché', path: '/players'});
+
+          res.render('players', {list: data, title: 'Les joueurs sur le marché', path: '/players', page: page, size: size});
         })
         .catch();
     });
 
     this.router.get('/player/mon-equipe', checkAuth, (req, res)=> {
-      console.log('url players');
-
-
-   
-      const userId = req.session.user.id;
-      user.findByPk(userId)
-       .then(user=> {
-
-        console.log('user', user);
-        user.getPlayers().then(players=> {
-          console.log('players', players);
-
- 
-
-          res.render('my-team', {list: players, title: 'Mes joueurs', path: '/player/mon-equipe'});
-        });
-
-       })
-       .catch(err=> {
-
-       });
-    });
-
-    this.router.get('/players', checkAuth, (req, res)=> {
-      console.log('url players');
-      // db.execute('SELECT * FROM players').then(data=>{
-      //   console.log('data', data[0]);
-      //   res.render('players', {list: data[0], title: 'Les joueurs', path: '/players'});
-      // })
-
-      Player.findAll({where: {userId:null}})
-        .then(data=> {
-          console.log('data', data);
-          res.render('players', {list: data, title: 'Les joueurs sur le marché', path: '/players'});
-        })
-        .catch();
-    });
-
-    this.router.get('/player/mon-equipe/downloadPDF', checkAuth, (req, res)=> {
 
       const userId = req.session.user.id;
       user.findByPk(userId)
        .then(user=> {
-
-        console.log('user', user);
         user.getPlayers().then(players=> {
 
           const playerRows = [];
           players.forEach(player=> {
             const rowPlayer = Object.values(player.dataValues);
-            console.log('rowPlayer', rowPlayer);
             playerRows.push(rowPlayer);
           });
 
           // On génère un PDF avec la liste de l'équipe
-          doc.pipe(fs.createWriteStream('./download/output2.pdf'));
+          doc.pipe(fs.createWriteStream(`./download/output${userId}.pdf`));
 
           const table0 = {
               headers: ['Numéro', 'Nom', 'Poste', 'Age', 'chemin img', 'Date de création', 'Date de modification'],
@@ -169,12 +139,9 @@ class PlayerController {
           .stroke();
 
           doc.end();
+ 
 
-          // On envoie le PDF
-          //var data = fs.readFileSync('../download/output2.pdf');
-          //res.contentType("application/pdf");
-          //res.send(data);
-      
+          res.render('my-team', {list: players, title: 'Mes joueurs', path: '/player/mon-equipe'});
         });
 
        })
@@ -183,10 +150,31 @@ class PlayerController {
        });
     });
 
+    // this.router.get('/players', checkAuth, (req, res)=> {
+   
+    //   // db.execute('SELECT * FROM players').then(data=>{
+    //   //   console.log('data', data[0]);
+    //   //   res.render('players', {list: data[0], title: 'Les joueurs', path: '/players'});
+    //   // })
 
+      
+
+
+    //   Player.findAll({offset: 3, limit: 2, where: {userId:null}})
+    //     .then(data=> {
+    //       res.render('players', {list: data, title: 'Les joueurs sur le marché', path: '/players'});
+    //     })
+    //     .catch();
+    // });
+
+    this.router.get('/player/mon-equipe/downloadPDF', checkAuth, (req, res)=> {
+      const userId = req.session.user.id;
+      var data = fs.readFileSync(`./download/output${userId}.pdf`);
+      //res.contentType("application/pdf");
+      res.send(data);
+    });
+    
     this.router.get('/player', checkAuth, (req, res)=> {
-      console.log('req.session', req.session);
-      console.log('url players');
       res.render('add_player', {title: 'Création d\'un nouveau joueur', path: '/player'});
     });
 
@@ -203,8 +191,6 @@ class PlayerController {
     });
 
     this.router.post('/player', upload.single('playerPhoto'),  (req, res)=> {
-   
-      console.log('req.file', req.file);
 
       Player.create({
         name: req.body.name,
@@ -213,7 +199,6 @@ class PlayerController {
         imgUrl: `images/${req.file.filename}`,
 
       }).then(data=>{
-        console.log('player enregistré');
         res.redirect('/players');
       });
       
