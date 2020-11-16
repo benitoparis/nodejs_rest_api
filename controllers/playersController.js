@@ -97,7 +97,7 @@ class PlayerController {
       // On compte le nombre total d'éléments
       Player.count({ where: {userId: null}}).then(totalItems => {
         nbTotalItems = totalItems;
-        lastPage = nbTotalItems / size;
+        lastPage = Math.ceil(nbTotalItems / size);
         hasNextPage = page < lastPage;
       });
 

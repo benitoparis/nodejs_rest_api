@@ -41,20 +41,30 @@
                 </tbody>
             </table>
 
-            <div> 
-
-                <div>
-                    <a href="/players?page=0&&size=3" class=" tn btn-primary">0</a>
+            <div class="d-flex justify-content-center">
+                <div class="w-50 d-flex justify-content-around"> 
+                    <div>
+                        <a href="/players?page=0&&size=3" class="p-1 border border-secondary">0</a>
+                    </div>
+    
+                    <% if(hasPreviousPage){ %>
+                    <div>
+                        <a href="/players?page=<%= previousPage %>&size=<%= size %>" class="p-1 border border-secondary">page précédente</a>
+                    </div>
+                    <% } %>
+    
+                    <% if(hasNextPage){ %>
+                    <div>
+                        <a href="/players?page=<%= nextPage %>&size=<%= size %>" class="p-1 border border-secondary">page suivante</a>
+                    </div> 
+                    <% } %>
+    
+                    <div>
+                        <a href="/players?page=<%= lastPage %>&size=<%= size %>" class="p-1 border border-secondary"><%= lastPage %></a>
+                    </div>
                 </div>
-                <div>
-                    <a href="/players?page=<%=  %>&size=<%= size %>" class=" tn btn-primary">page précédente</a>
-                </div>
-
-
-
-                    <a href="/players?page=<%= parseInt(page) + 1 %>&size=<%= size %>" class=" tn btn-primary">page suivante</a>
-                </div> 
             </div>
+
         </div>
         
     
