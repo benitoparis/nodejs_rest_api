@@ -69,11 +69,19 @@ class PlayerController {
 
       let page= 0;
       let size= 3;
+      let hasPreviousPage;
+      let hasNextPage;
+      let nextPage;
+      let previousPage;
+      let lastPage;
+      let nbTotalItems;
 
       if(req.query.page && req.query.size){
         page = req.query.page;
         size = req.query.size;
-
+        hasPreviousPage = page > 0 ? true : false;
+        previousPage = parseInt(page) - 1;
+        nextPage = parseInt(page) + 1;
       }
       
 
@@ -86,10 +94,31 @@ class PlayerController {
       //   res.render('players', {list: data[0], title: 'Les joueurs', path: '/players'});
       // })
 
+      // On compte le nombre total d'éléments
+      Player.count({ where: {userId: null}}).then(totalItems => {
+        nbTotalItems = totalItems;
+        lastPage = nbTotalItems / size;
+        hasNextPage = page < lastPage;
+      });
+
+
       Player.findAll({offset: offset, limit: limit, where: {userId: null}})
         .then(data=> {
 
-          res.render('players', {list: data, title: 'Les joueurs sur le marché', path: '/players', page: page, size: size});
+          res.render(
+            'players',
+             {
+              list: data,
+              title: 'Les joueurs sur le marché',
+              path: '/players',
+              size: size,
+              hasPreviousPage:hasPreviousPage,
+              hasNextPage:hasNextPage,
+              nextPage:nextPage,
+              previousPage:previousPage,
+              lastPage:lastPage,
+              nbTotalItems:nbTotalItems
+            });
         })
         .catch();
     });
