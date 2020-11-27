@@ -1,0 +1,17 @@
+body {
+    background-color: #000000;
+}
+
+
+/* CSS du canvas */
+.background {
+    background-color: #000000;
+}
+
+#stage {
+    background-color: #000000;
+}
+
+.game {
+    width:100%;
+}

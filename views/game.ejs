@@ -1,12 +1,42 @@
-<%- include('./includes/header'); %>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title><%= title %></title>
+      <link rel="stylesheet" href="css/bootstrap.min.css"/>
+      <link rel="stylesheet" type="text/css" href="css/game-screen.css" />
 
-    <h1><%= title %></h1>
+  </head>
 
+  <body>
 
-        
+      <h1><%= title %></h1>
 
-    <script src="js/jquery-1.11.0.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/wow.min.js"></script>
-</body>
+      <!-- Le canvas -->
+      <div class="d-flex justify-content-center align-items-center">
+          <div id="game">
+            <div>
+
+              <!-- la balise HTML CAN -->
+              <canvas id="stage">
+                // ici va apparaitre l'écran du jeu
+              </canvas>
+            </div>
+
+          </div>
+          <div class="d-flex flex-column justify-content-around p-3">
+            <div>
+              <audio id="myPlayer" controls >
+                  Votre navigateur ne supporte pas l'audio
+                <code>audio</code>
+              </audio>
+            </div>
+          </div>
+        </div>
+
+      <script src="js/jquery-1.11.0.min.js"></script>
+      <script src="js/bootstrap.min.js"></script>
+      <script src="js/wow.min.js"></script>
+  </body>
 </html>
