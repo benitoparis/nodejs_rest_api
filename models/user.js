@@ -8,10 +8,9 @@ const user = sequelize.define('users', {
         allowNull: false,
         primaryKey: true
     },
-    nickname: Sequelize.STRING,
     email: Sequelize.STRING,
-    age: Sequelize.INTEGER,
-    city: Sequelize.STRING,
+    nickname: Sequelize.STRING,
+    ageRange: Sequelize.STRING,
     password: Sequelize.STRING
 });
 

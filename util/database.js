@@ -11,6 +11,6 @@
 
 const Sequelize = require('sequelize');
 
-const sequelize = new Sequelize('football_manager', 'root', 'charlie2015', {dialect: 'mysql', host:'localhost'});
+const sequelize = new Sequelize('rpg', 'root', 'charlie2015', {dialect: 'mysql', host:'localhost'});
 
 module.exports = sequelize;

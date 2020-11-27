@@ -1,35 +1,67 @@
 <%- include('./includes/header'); %>
 
-        <div class="d-flex justify-content-center">
-            <div id="signup" style="width: 400px">
-                <form action="/signup" method="POST">
+        <div class="container">
+            <div class="d-flex justify-content-center h-100">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Sign Up</h3>
+                        <div class="d-flex justify-content-end social_icon">
+                            <!-- <span><i class="fab fa-facebook-square"></i></span>
+                            <span><i class="fab fa-google-plus-square"></i></span>
+                            <span><i class="fab fa-twitter-square"></i></span> -->
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form action="/signup" method="POST">
+                            <div class="input-group form-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                </div>
+                                <input type="email" name="email" id="email" class="form-control" placeholder="email">
+                            </div>
 
-                    <div class="form-group">
-                        <label for="city">Nickname*</label>
-                        <input type="text" name="nickname" id="city" class="form-control">
+                            <div class="input-group form-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                </div>
+                                <input type="text" name="nickname" id="nickname" class="form-control" placeholder="nickname">
+                            </div>
+
+                            <div class="input-group form-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                </div>
+                                <select name="ageRange" id="ageRange" class="form-control" placeholder="Age range">
+                                    <option value="" disabled>Your age range</option>
+                                    <option value="10-20">Entre 10 et 20 ans</option>
+                                    <option value="20-30">Entre 20 et 30 ans</option>
+                                    <option value="30-40">Entre 30 et 40 ans</option>
+                                    <option value="40-50">Entre 40 et 50 ans</option>
+                                    <option value="50*">50 ans et +</option>
+                                </select>
+                            </div>
+
+                            <div class="input-group form-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-key"></i></span>
+                                </div>
+                                <input type="password" name="password" id="password" class="form-control" placeholder="password">
+                            </div>
+
+                            <div class="input-group form-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-key"></i></span>
+                                </div>
+                                <input type="password" name="passwordConfirmation" id="passwordConfirmation" class="form-control" placeholder="password confirmation">
+                            </div>
+
+                            <div class="form-group">
+                                <input type="submit" value="Sign up" class="btn float-right login_btn">
+                            </div>
+                        </form>
                     </div>
-                    <div class="form-group">
-                        <label for="email">Email*</label>
-                        <input type="email" name="email" id="email" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label for="age">Age*</label>
-                        <input type="number" name="age" id="age" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label for="city">City*</label>
-                        <input type="text" name="city" id="city" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label for="password">Password*</label>
-                        <input type="password" name="password" id="password" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label for="passwordConfirmation">Password confirmation*</label>
-                        <input type="password" name="passwordConfirmation" id="passwordConfirmation" class="form-control">
-                    </div>
-                    <button type="submit" class="btn btn-primary">Se connecter</button>
-                </form>
+
+                </div>
             </div>
         </div>
 

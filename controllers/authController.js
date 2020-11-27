@@ -13,12 +13,10 @@ class AuthController {
     registerRoutes(){
 
         this.router.get('/login', (req, res)=> {
-            res.render('login', {title: 'Connexion', path: '/login'});
+            res.render('login', {title: 'Connexion', loggedIn: req.session.isLoggedIn, path: '/login'});
         });
 
         this.router.post('/login', (req, res)=> {
-
-            console.log('req.body', req.body);
 
             User.findOne({ where: { email: req.body.email, password: req.body.password } })
             .then(user=> {
@@ -48,20 +46,19 @@ class AuthController {
         });
 
         this.router.get('/signup', (req, res)=> {
-            res.render('signup', {title: 'Signup', path: '/signup'});
+            res.render('signup', {title: 'Signup', loggedIn: req.session.isLoggedIn, path: '/signup'});
         });
 
         this.router.post('/signup', (req, res)=> {
             console.log('req', req.body);
             User.create({
-                nickname: req.body.nickname,
                 email: req.body.email,
-                age: req.body.age,
-                city: req.body.city,
+                nickname: req.body.nickname,
+                ageRange: req.body.ageRange,
                 password: req.body.password
             }).then(user =>{
                 if (user !== null){
-                    res.render('home', {title: 'Accueil', path: '/home'});
+                    res.render('home', {title: 'Accueil',loggedIn: req.session.isLoggedIn, path: '/home'});
                 }
             });
         });
@@ -70,6 +67,22 @@ class AuthController {
             req.session.destroy(()=>{
                 res.redirect('login');
             });
+        });
+
+        this.router.get('/histoire-du-jeu', (req, res)=> {
+            res.render('game-story', {title: 'Histoire et présentation des personnages',loggedIn: req.session.isLoggedIn, path: '/histoire-du-jeu'});
+        });
+
+        this.router.get('/le-projet', (req, res)=> {
+            res.render('project', {title: 'Présentation du projet', loggedIn: req.session.isLoggedIn, path: '/le-projet'});
+        });
+
+        this.router.get('/contact', (req, res)=> {
+            res.render('contact', {title: 'contact', loggedIn: req.session.isLoggedIn, path: '/contact'});
+        });
+
+        this.router.get('/jeu', (req, res)=> {
+            res.render('game', {title: 'contact', loggedIn: req.session.isLoggedIn, path: '/jeu'});
         });
 
     }

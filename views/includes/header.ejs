@@ -5,30 +5,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><%= title %></title>
     <link rel="stylesheet" href="css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+
 </head>
 
 <body>
 
-    <div class="d-flex flex-row align-items-center border">
-        <ul class="nav nav-pills">
-            <li class="nav-item">
-              <a class="nav-link <%= path ==='/player' ? 'active' : ''%>" href="/player">Créer un joueur</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link <%= path === '/players' ? 'active' : ''%>" href="/players">Joueurs</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link <%= path === '/player/mon-equipe' ? 'active' : ''%>" href="/player/mon-equipe">My team</a>
-            </li>
-          </ul>
-          <div>
-            <a class="nav-link <%= path === '/signup' ? 'active' : ''%>"  href="/signup">signup</a>
-          </div>
+  <div class="w-100">
+    <div id="headband" class="d-flex justify-content-between align-items-center border-bottom">
+
+      <div class="nav nav-pills d-flex flex-row">
+          <li class="nav-item">
+            <a class="nav-link <%= path ==='/accueil' ? 'active' : ''%>" href="/home">Accueil</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link <%= path === '/contact' ? 'active' : ''%>" href="/contact">Contact</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link <%= path === '/histoire-du-jeu' ? 'active' : ''%>" href="/histoire-du-jeu">Histoire du jeu et personnages</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link <%= path === '/le-projet' ? 'active' : ''%>" href="/le-projet">Le projet</a>
+          </li>
+      </div>
+
+      <div class="d-flex flex-row">
+        <% if(!loggedIn){%>
+        <div>
+          <a class="nav-link <%= path === '/login' ? 'active' : ''%>"  href="/login">Login</a>
+        </div>
+        <div>
+          <a class="nav-link btn btn-sm signup-btn mx-2<%= path === '/signup' ? 'active' : ''%>"  href="/signup">Signup</a>
+        </div>
+        <% } %>
+
+        <% if(loggedIn){%>
           <div>
             <a class="nav-link" href="/logout">Logout</a>
           </div>
-    </div>
+        <% } %>
+      </div>
 
-    <div class="container">
-      <h1 class="w-100 my-3"><%= title %></h1>
-    </div>
+  </div>
+  </div>
