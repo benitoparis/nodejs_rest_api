@@ -10,21 +10,29 @@ const sequelize = require('./util/database');
 
 // Import des modeles sequelize
 const user = require('./models/user');
+const message = require('./models/message');
+const dialog = require('./models/dialog');
+const dialogList = require('./models/dialogList');
+const door = require('./models/door');
+const doorList = require('./models/doorList');
+const item = require('./models/item');
+const itemList = require('./models/itemList');
+const stage = require('./models/stages');
 
+//  Session middleware
 const session = require('express-session');
 const SessionStore = require('express-session-sequelize')(session.Store);
-
 
 const sequelizeSessionStore = new SessionStore({
     db: sequelize,
 });
 
 
-
+// On set l'engine html de expressJS
 app.set('view engine', 'ejs');
 app.set('views', './views');
 
-
+// On récupère l'objet router pour construire les routes
 const router = express.Router();
 
 app.use(express.static(__dirname + '/node_modules/bootstrap/dist'));
@@ -32,7 +40,7 @@ app.use(express.static(__dirname + '/public'));
 //app.use(express.static(path.join(__dirname + 'uploads')));
 app.use(express.static('uploads'));
 
-
+// On ajoute le body parser comme middle ware pour parser le contenu des formulaires html
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(session(
     {
@@ -42,6 +50,22 @@ app.use(session(
         store: sequelizeSessionStore
     }
 ));
+
+// On s'occupe de définir le type de liaison entre les tables de notre BDD
+
+itemList.hasMany(item);
+dialog.hasMany(message);
+dialogList.hasMany(dialog);
+doorList.hasMany(door);
+stage.hasOne(itemList);
+stage.hasOne(dialogList);
+stage.hasOne(doorList);
+
+
+
+
+
+
 
 sequelize.sync({
     force: true
@@ -54,6 +78,7 @@ sequelize.sync({
 
 let AuthController = require('./controllers/authController');
 new AuthController(router).registerRoutes();
+
 
 app.route('/home').get(function(req, res) {
     console.log('home');
