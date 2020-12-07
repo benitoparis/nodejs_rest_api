@@ -1,5 +1,10 @@
 
 const User = require('../models/user');
+const Item = require('../models/item');
+const Stage = require('../models/stages');
+const Door = require('../models/door');
+const Dialog = require('../models/dialog');
+const Message = require('../models/message');
 
 
 class AuthController {
@@ -25,7 +30,54 @@ class AuthController {
                 if (user !== null){
                     req.session.isLoggedIn = true;
                     req.session.user = user;
-                    res.render('home', {title:'accueil',loggedIn: req.session.isLoggedIn, path:'/home'});
+
+                    let userStageJSON = '';
+                    Stage.findByPk(
+                        user.stageId, 
+                        {
+                            include: [
+                            {
+                                model: Item,
+                                as: 'items' 
+                            },
+                            {
+                                model: Dialog,
+                                as: 'dialogs',
+                                include : [{
+                                    model: Message,
+                                    as: 'messages',
+                                }]
+                            },
+                            {
+                                model: Door,
+                                as: 'doors' 
+                            },
+        
+        
+                        ]
+                        //include: [{all: true}]
+                        }
+                    )
+                    .then(stage => {
+                        if (stage !== null){
+                            console.log('stage', stage);
+
+                            userStageJSON = stage;
+
+                            const thestage = encodeURIComponent(JSON.stringify(userStageJSON));
+                            //res.status(200).json(stage);
+
+                            res.cookie('stage',thestage, { maxAge: 900000, httpOnly: true }).render('home', {title:'accueil',loggedIn: req.session.isLoggedIn, path:'/home'});
+                        } else {
+                            return new Error('pas de stage');
+                        }
+                    }).catch(err=>{
+                        console.log('err', err);
+                        res.status(404).json('Aucun résultat');
+                    });
+
+
+                    //res.render('home', {title:'accueil',loggedIn: req.session.isLoggedIn, path:'/home'});
                 } else {
                     res.redirect('login');
                 }

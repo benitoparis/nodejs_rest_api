@@ -13,8 +13,8 @@ const user = require('./models/user');
 const message = require('./models/message');
 const dialog = require('./models/dialog');
 const dialogList = require('./models/dialogList');
+
 const door = require('./models/door');
-const doorList = require('./models/doorList');
 const item = require('./models/item');
 const itemList = require('./models/itemList');
 const stage = require('./models/stages');
@@ -53,22 +53,54 @@ app.use(session(
 
 // On s'occupe de définir le type de liaison entre les tables de notre BDD
 
-itemList.hasMany(item);
+stage.belongsToMany(item, {
+    through: 'itemList',
+    as: 'items',
+    foreignKey: 'stage_id',
+});
+
+item.belongsToMany(stage, {
+    through: 'itemList',
+    as: 'stages',
+    foreignKey: 'item_id',
+});
+
+//
+
+stage.belongsToMany(dialog, {
+    through: 'dialogLists',
+    as: 'dialogs',
+    foreignKey: "stage_id",
+});
+
+
+dialog.belongsToMany(stage, {
+    through: 'dialogLists',
+    as: 'stages',
+    foreignKey: 'dialog_id',
+});
+
+
+
+//
 dialog.hasMany(message);
-dialogList.hasMany(dialog);
-doorList.hasMany(door);
-stage.hasOne(itemList);
-stage.hasOne(dialogList);
-stage.hasOne(doorList);
+
+// dialog.hasMany(message);
+// dialogList.hasMany(dialog);
+
+// dialogList.hasMany(stage);
 
 
+stage.hasMany(door);
 
 
-
+//
+stage.hasMany(user);
+user.belongsTo(stage);
 
 
 sequelize.sync({
-    force: true
+    force: false
 }).then(data=>{
     app.listen(8080);
 })
@@ -79,6 +111,8 @@ sequelize.sync({
 let AuthController = require('./controllers/authController');
 new AuthController(router).registerRoutes();
 
+let gameConfigController = require('./controllers/gameconfigController');
+new gameConfigController(router).registerRoutes();
 
 app.route('/home').get(function(req, res) {
     console.log('home');
