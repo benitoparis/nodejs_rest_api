@@ -1,17 +1,18 @@
 const Sequelize = require('sequelize');
 const sequelize = require('../util/database');
 
-const stage = sequelize.define('stages', {
+const doorDestination = sequelize.define('doorDestination', {
     id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
         allowNull: false,
         primaryKey: true
     },
-    level: Sequelize.INTEGER,
     name: Sequelize.STRING,
-    description: Sequelize.STRING,
+    positionX: Sequelize.INTEGER,
+    positionY: Sequelize.INTEGER,
+    heroDirection: Sequelize.INTEGER
 });
 
 
-module.exports = stage;
+module.exports = doorDestination;

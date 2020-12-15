@@ -1,17 +1,16 @@
 const Sequelize = require('sequelize');
 const sequelize = require('../util/database');
 
-const stage = sequelize.define('stages', {
+const mapSheet = sequelize.define('mapSheets', {
     id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
         allowNull: false,
         primaryKey: true
     },
-    level: Sequelize.INTEGER,
     name: Sequelize.STRING,
-    description: Sequelize.STRING,
+    collisionArray: Sequelize.STRING,
+    reference: Sequelize.STRING
 });
 
-
-module.exports = stage;
+module.exports = mapSheet;

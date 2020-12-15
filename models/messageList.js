@@ -1,17 +1,15 @@
 const Sequelize = require('sequelize');
 const sequelize = require('../util/database');
 
-const stage = sequelize.define('stages', {
+const messageList = sequelize.define('messagesLists', {
     id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
         allowNull: false,
         primaryKey: true
     },
-    level: Sequelize.INTEGER,
-    name: Sequelize.STRING,
     description: Sequelize.STRING,
 });
 
 
-module.exports = stage;
+module.exports = messageList;

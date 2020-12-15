@@ -1,17 +1,17 @@
 const Sequelize = require('sequelize');
 const sequelize = require('../util/database');
 
-const stage = sequelize.define('stages', {
+const imageSet = sequelize.define('imagesSet', {
     id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
         allowNull: false,
         primaryKey: true
     },
-    level: Sequelize.INTEGER,
-    name: Sequelize.STRING,
-    description: Sequelize.STRING,
+    type: Sequelize.STRING,
+    reference: Sequelize.STRING,
+    filePath: Sequelize.STRING,
 });
 
 
-module.exports = stage;
+module.exports = imageSet;

@@ -11,13 +11,21 @@ const sequelize = require('./util/database');
 // Import des modeles sequelize
 const user = require('./models/user');
 const message = require('./models/message');
-const dialog = require('./models/dialog');
-const dialogList = require('./models/dialogList');
-
+const messageList = require('./models/messageList');
+const mapSheet = require('./models/mapSheet');
 const door = require('./models/door');
+const doorDestination = require('./models/doorDestination');
+const switchButton = require('./models/switchButton');
 const item = require('./models/item');
 const itemList = require('./models/itemList');
 const stage = require('./models/stages');
+const people = require('./models/people');
+const secretPassage = require('./models/secretPassage');
+const secretPassageDestination = require('./models/secretPassageDestination');
+const mainCharacter = require('./models/mainCharacter');
+const imageSet = require('./models/imageSet');
+
+
 
 //  Session middleware
 const session = require('express-session');
@@ -51,54 +59,69 @@ app.use(session(
     }
 ));
 
-// On s'occupe de définir le type de liaison entre les tables de notre BDD
-
-stage.belongsToMany(item, {
-    through: 'itemList',
+/* On s'occupe de définir le type de liaison entre les tables de notre BDD */
+mapSheet.belongsToMany(item, {
+    through: 'itemLists',
     as: 'items',
-    foreignKey: 'stage_id',
+    foreignKey: 'mapSheet_id',
 });
 
-item.belongsToMany(stage, {
-    through: 'itemList',
-    as: 'stages',
+item.belongsToMany(mapSheet, {
+    through: 'itemLists',
+    as: 'mapSheets',
     foreignKey: 'item_id',
 });
 
-//
+mapSheet.hasMany(people);
+people.belongsTo(mapSheet);
 
-stage.belongsToMany(dialog, {
-    through: 'dialogLists',
-    as: 'dialogs',
-    foreignKey: "stage_id",
+mapSheet.hasMany(mainCharacter);
+mainCharacter.belongsTo(mapSheet);
+
+mapSheet.hasMany(mainCharacter);
+mainCharacter.belongsTo(mapSheet);
+
+people.belongsToMany(message,{
+    through: 'messagesLists',
+    as: 'messages',
+    foreignKey: 'people_id',
+});
+message.belongsToMany(people,{
+    through: 'messagesLists',
+    as: 'people',
+    foreignKey: 'message_id',
 });
 
 
-dialog.belongsToMany(stage, {
-    through: 'dialogLists',
-    as: 'stages',
-    foreignKey: 'dialog_id',
-});
+mapSheet.hasMany(door);
+door.belongsTo(mapSheet);
 
+door.hasOne(doorDestination);
+doorDestination.belongsTo(door);
 
+// mapSheet.hasMany(doorDestination);
+// doorDestination.belongsTo(mapSheet);
 
-//
-dialog.hasMany(message);
+mapSheet.hasMany(secretPassage);
+secretPassage.belongsTo(mapSheet);
 
-// dialog.hasMany(message);
-// dialogList.hasMany(dialog);
+secretPassage.hasOne(secretPassageDestination);
+secretPassageDestination.belongsTo(secretPassage);
 
-// dialogList.hasMany(stage);
+mapSheet.hasMany(switchButton);
+switchButton.belongsTo(mapSheet);
+  
+stage.hasMany(mapSheet);
+mapSheet.belongsTo(stage);
 
-
-stage.hasMany(door);
-
-
-//
 stage.hasMany(user);
 user.belongsTo(stage);
 
 
+
+/*fin des liaisons à la BDD */
+
+// On synvhronise nos modèles avec la base de données
 sequelize.sync({
     force: false
 }).then(data=>{
